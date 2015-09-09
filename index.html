@@ -1,5 +1,7 @@
-<body style="background:black;text-align:center;">
-	<canvas id="c" >
+<body style="background:black;text-align:center;color:white">
+	<canvas id="c" ></canvas>
+	Player vs Player<input type="radio" name="ai" value="0" checked> 
+    Player vs AI<input type="radio" name="ai" value="1" id="ai" >
 <script>
 	names=["Red","Blue"]
 	
@@ -14,6 +16,7 @@
 	c.height=context.height=480
 	map=[];
 	
+	dead=-1;
 	
 	truetimer=0;
 	timer=0;
@@ -58,7 +61,7 @@
 				context.drawImage(a,tile,0,tile,tile,i*24,j*24,24,24);
 				break;
 				case 2:
-				context.drawImage(a,tile*4,tile*(timer%3),tile,tile,i*24,j*24,24,24);
+				context.drawImage(a,tile*4,tile*(timer%2),tile,tile,i*24,j*24,24,24);
 				break;
 				}
 			}
@@ -70,12 +73,17 @@
 			context.drawImage(a,tile,2*tile,tile,tile,players[currentPlayer].x*24,players[currentPlayer].y*24,24,24);
 		}
 		players.forEach(function(x){
+			if(dead==x.id){return}
 			context.save();
 			context.translate(x.x*24+10,x.y*24+10);
 			context.rotate(x.r);
 			context.drawImage(a,tile*2+tile*x.id,tile*((x.id==currentPlayer)*(1+timer%2)),tile,tile,-10,-10,24,24);
 			context.restore();
 		});
+		if(dead!=-1){
+			context.drawImage(a,4*tile,2*tile,tile,tile,players[dead].x*24,players[dead].y*24,24,24);
+		}
+		
 		break;
 		}
 	},100)
@@ -86,6 +94,7 @@
 	window.addEventListener("keydown",function(e){
 		switch(gamestate){
 			case 0:
+			dead=-1
 			for (i=0;i<30;i++){
 		map[i]=[];
 			for(j=0;j<20;j++){
@@ -98,6 +107,7 @@
 		map[x.x][x.y]=0;
 	})
 	laser={x:100,y:100,vx:0,vy:0}
+	input=false
 			gamestate=1;
 			break;
 			case 2:
@@ -133,10 +143,14 @@
 			players[i].y+=y;
 			setTimeout(movePlayer,200,x,y,i);
 		}else if(map[players[i].x+x]&&map[players[i].x+x][players[i].y+y]==2 ){
-			gamestate=2;
+			dead=i
 			winner=names[(i+1)%2]
+			setTimeout(function(){
+				gamestate=2;
+			},1000);
 		}else {
 			currentPlayer=(currentPlayer+1)%2
+			AI();
 			setTimeout(function(){input=false;},100);
 		}
 	}
@@ -147,7 +161,10 @@
 		players.forEach(function(x){
 		if(laser.y==x.y&&laser.x==x.x){
 			winner=names[(x.id+1)%2]
-			gamestate=2;
+			dead=x.id
+			setTimeout(function(){
+				gamestate=2;
+			},1000);
 		}
 		});
 		if(map[laser.x]&&map[laser.x][laser.y]==0){
@@ -159,7 +176,44 @@
 			laser.x=laser.y=100;
 			laser.vx+=laser.vy=0;
 			currentPlayer=(currentPlayer+1)%2
+			AI();
 			setTimeout(function(){input=false;},100)
+		}
+	}
+	
+	lastx=-1
+	lasty=-1
+	function AI(){
+		if(currentPlayer==1&&document.getElementById("ai").checked){
+			if(lastx==players[1].x&&players[1].y==lasty){
+				laser.x=players[1].x;
+			laser.y=players[1].y;
+			laser.vx=Math.sin(players[1].r);
+			laser.vy=-Math.cos(players[1].r);
+			moveProj();
+			lastx=-1
+	lasty=-1
+				return
+			}
+			lastx=players[1].x
+			lasty=players[1].y
+			x=0
+			y=0
+			if(players[1].y>players[0].y){
+				y=-1
+			}else{
+				y=1
+			}
+			if(Math.abs(players[1].x-players[0].x)>5){
+			if(players[1].x>players[0].x){
+				x=-1
+				y=0
+			}else{
+				x=1
+				y=0
+			}
+			}
+		movePlayer(x,y,currentPlayer);
 		}
 	}
 </script>
