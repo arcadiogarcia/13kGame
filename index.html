@@ -37,5 +37,30 @@
 		players.forEach(function(x){
 			context.drawImage(a,16+8*x.id,8*(timer%3),8,8,x.x*20,x.y*20,24,24);
 		});
+		if((timer%6)<3){
+			context.drawImage(a,8,8,8,8,players[currentPlayer].x*20,players[currentPlayer].y*20,24,24);
+		}
 	},200)
+	
+	currentPlayer=0
+	
+	window.addEventListener("keydown",function(e){
+		x=0;
+		y=0;
+		x=e.keyCode==37?x-1:x;
+		x=e.keyCode==39?x+1:x;
+		y=e.keyCode==38?y-1:y;
+		y=e.keyCode==40?y+1:y;
+		movePlayer(x,y,currentPlayer);
+	});
+	
+	function movePlayer(x,y,i){
+		if(map[players[i].x+x][players[i].y+y]==0){
+			players[i].x+=x;
+			players[i].y+=y;
+			movePlayer(x,y,i);
+		}else {
+			currentPlayer=(currentPlayer+1)%2
+		}
+	}
 </script>
