@@ -51,26 +51,31 @@
 				}else{
 					context.globalAlpha=Math.abs((10-timer-i+j)%20)/30+0.2
 				}
-				context.drawImage(a,0,(7*i+5*j+50)%(tile*2),tile,tile,i*20,j*20,24,24);
+				context.drawImage(a,0,(7*i+5*j+50)%(tile*2),tile,tile,i*24,j*24,24,24);
 				context.globalAlpha=1
 				break;
 				case 1:
-				context.drawImage(a,tile,0,tile,tile,i*20,j*20,24,24);
+				context.drawImage(a,tile,0,tile,tile,i*24,j*24,24,24);
 				break;
 				case 2:
-				context.drawImage(a,tile*4,tile*(timer%3),tile,tile,i*20,j*20,24,24);
+				context.drawImage(a,tile*4,tile*(timer%3),tile,tile,i*24,j*24,24,24);
 				break;
 				}
 			}
 		}
+		
+		context.drawImage(a,tile,tile,tile,tile,laser.x*24,laser.y*24,24,24);
+		
+		if(timer%4>2){
+			context.drawImage(a,tile,2*tile,tile,tile,players[currentPlayer].x*24,players[currentPlayer].y*24,24,24);
+		}
 		players.forEach(function(x){
 			context.save();
-			context.translate(x.x*20+10,x.y*20+10);
+			context.translate(x.x*24+10,x.y*24+10);
 			context.rotate(x.r);
-			context.drawImage(a,tile*2+tile*x.id,tile*((x.id==currentPlayer)*timer%3),tile,tile,-10,-10,24,24);
+			context.drawImage(a,tile*2+tile*x.id,tile*((x.id==currentPlayer)*(1+timer%2)),tile,tile,-10,-10,24,24);
 			context.restore();
 		});
-		context.drawImage(a,tile,tile,tile,tile,laser.x*20,laser.y*20,24,24);
 		break;
 		}
 	},100)
