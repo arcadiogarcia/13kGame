@@ -139,8 +139,20 @@
 	function movePlayer(x,y,i){
 		players[i].r=Math.atan2(y,x)+Math.PI/2;
 		if(map[players[i].x+x]&&map[players[i].x+x][players[i].y+y]==0 && !(players[i].y+y==players[(i+1)%2].y&&players[i].x+x==players[(i+1)%2].x)){
+			ox=players[i].x
+			oy=players[i].y
 			players[i].x+=x;
 			players[i].y+=y;
+			if(map[ox+x][oy+y]==2){
+				t=x
+				x=y
+				y=t		
+			}
+			if(map[ox-y][oy-x]==2){
+				t=x
+				x=-y
+				y=-t		
+			}
 			setTimeout(movePlayer,200,x,y,i);
 		}else if(map[players[i].x+x]&&map[players[i].x+x][players[i].y+y]==2 ){
 			dead=i
@@ -149,13 +161,13 @@
 				gamestate=2;
 			},1000);
 		}else {
-			currentPlayer=(currentPlayer+1)%2
-			AI();
-			setTimeout(function(){input=false;},100);
+			next();
 		}
 	}
 	
 	function moveProj(){
+		ox=laser.x
+		oy=laser.y
 		laser.x+=laser.vx;
 		laser.y+=laser.vy;
 		players.forEach(function(x){
@@ -168,6 +180,18 @@
 		}
 		});
 		if(map[laser.x]&&map[laser.x][laser.y]==0){
+			if(map[ox+laser.vy][oy+laser.vx]==2){
+				t=laser.vx
+				laser.vx=laser.vy
+				laser.vy=t		
+				next();		
+			}
+			if(map[ox-laser.vy][oy-laser.vx]==2){
+				t=laser.vx
+				laser.vx=-laser.vy
+				laser.vy=-t	
+				next();			
+			}
 			setTimeout(moveProj,100);
 		}else{
 			if(map[laser.x]&&map[laser.x][laser.y]==1){
@@ -175,9 +199,8 @@
 			}
 			laser.x=laser.y=100;
 			laser.vx+=laser.vy=0;
-			currentPlayer=(currentPlayer+1)%2
-			AI();
-			setTimeout(function(){input=false;},100)
+			
+			next();
 		}
 	}
 	
@@ -215,5 +238,16 @@
 			}
 		movePlayer(x,y,currentPlayer);
 		}
+	}
+	
+	function next(){
+		currentPlayer=(currentPlayer+1)%2
+		AI();
+		setTimeout(function(){input=false;},100)
+		do{
+		i=Math.floor(Math.random()*30)
+		j=Math.floor(Math.random()*20)
+		}while(map[i][j]==2)
+		map[i][j]=2
 	}
 </script>
