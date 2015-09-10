@@ -1,5 +1,6 @@
 <body style="background:black;text-align:center;color:white">
 	<canvas id="c" ></canvas>
+	<br/>
 	Player vs Player<input type="radio" name="ai" value="0" checked> 
     Player vs AI<input type="radio" name="ai" value="1" id="ai" >
 <script>
@@ -165,6 +166,7 @@
 				next();
 			}else{
 				input=false
+				return -1;
 			}	
 		}
 	}
@@ -258,7 +260,7 @@
 				y=0
 			}
 			}
-		movePlayer(x,y,currentPlayer);
+			while(movePlayer(x,y,currentPlayer)==-1);
 		}
 	}
 	
