@@ -208,10 +208,20 @@
 			if(map[laser.x]&&map[laser.x][laser.y]==1){
 				map[laser.x][laser.y]=0;
 			}
-			laser.x=laser.y=100;
-			laser.vx+=laser.vy=0;
-			if(!loop){
-			next();
+			if(map[laser.x]&&map[laser.x][laser.y]==2){
+				do{
+					i=Math.floor(Math.random()*30)
+					j=Math.floor(Math.random()*20)
+				}while(map[i][j]!=2)
+				laser.x=i
+				laser.y=j
+				setTimeout(moveProj,500,false);
+			}else{
+				laser.x=laser.y=100;
+				laser.vx+=laser.vy=0;
+				if(!loop){
+					next();
+				}
 			}
 		}
 	}
