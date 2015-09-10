@@ -24,20 +24,84 @@
 	setInterval(function(){
 		switch(gamestate){
 			case 0:
+			timer++;
 			context.fillStyle="black"
+			context.globalAlpha=0.3;
 		context.fillRect(0,0,720,480)
-		context.fillStyle = '#f00';
- context.font = 'italic bold 30px sans-serif';
- context.textBaseline = 'bottom';
- context.fillText('Space battle!', 50, 100);
+ context.font = '100px Verdana, Geneva, sans-serif';
+ context.textBaseline = 'top';
+ context.textAlign="center"
+ context.lineWidth=30;
+ for (i=0;i<30;i++){
+			for(j=0;j<20;j++){
+					context.globalAlpha=Math.abs((10-timer+i+j)%30)/30
+				context.drawImage(a,0,(7*i+5*j+50)%(tile*2),tile,tile,i*24,j*24,24,24);
+				context.globalAlpha=1
+			}
+		}
+   		var gradient=context.createLinearGradient(0,100,0,400);
+ gradient.addColorStop("0","#00214f");
+ gradient.addColorStop(Math.abs(5-(timer+5)%10)/10,"#252525");
+ gradient.addColorStop("1.0","#7200ad");
+  context.strokeStyle=gradient;
+ // Fill with gradient
+
+ context.strokeText('Event', 350+ Math.round(Math.random()*14-7), 50+ Math.round(Math.random()*14-7));
+  context.strokeText('horizon', 350+ Math.round(Math.random()*14-7),200+ Math.round(Math.random()*14-7));
+
+  context.lineWidth=8;
+  		var gradient=context.createLinearGradient(0,100,0,400);
+ gradient.addColorStop("0","#006ac0");
+ gradient.addColorStop(Math.abs(5-timer%10)/10,"#252525");
+ gradient.addColorStop("1.0","#2e0251");
+ // Fill with gradient
+ context.strokeStyle=gradient;
+   context.strokeText('Event', 350+Math.round(Math.random()*2-1), 50+Math.round(Math.random()*2-1));
+  context.strokeText('horizon', 350+Math.round(Math.random()*2-1),200+Math.round(Math.random()*2-1));
+    context.fillStyle="white";
+   context.fillText('Event', 350+ Math.round(Math.random()*14-7), 50+ Math.round(Math.random()*14-7));
+  context.fillText('horizon', 350+ Math.round(Math.random()*14-7),200+ Math.round(Math.random()*14-7));
 			break;
 			case 2:
+					timer++;
 			context.fillStyle="black"
+			context.globalAlpha=0.3;
 		context.fillRect(0,0,720,480)
-		context.fillStyle = winner;
- context.font = 'italic bold 30px sans-serif';
- context.textBaseline = 'bottom';
- context.fillText(winner +" wins!", 50, 100);
+ context.font = '100px Verdana, Geneva, sans-serif';
+ context.textBaseline = 'top';
+ context.textAlign="center"
+ context.lineWidth=30;
+ for (i=0;i<30;i++){
+			for(j=0;j<20;j++){
+					context.globalAlpha=Math.abs((10-timer+i+j)%30)/30
+				context.drawImage(a,0,(7*i+5*j+50)%(tile*2),tile,tile,i*24,j*24,24,24);
+				context.globalAlpha=1
+			}
+		}
+   		var gradient=context.createLinearGradient(0,100,0,400);
+ gradient.addColorStop("0",winner);
+ gradient.addColorStop(Math.abs(5-(timer+5)%10)/10,"#252525");
+ gradient.addColorStop("1.0",winner);
+  context.strokeStyle=gradient;
+ // Fill with gradient
+
+ context.strokeText(winner, 350+ Math.round(Math.random()*14-7), 50+ Math.round(Math.random()*14-7));
+  context.strokeText('wins!', 350+ Math.round(Math.random()*14-7),200+ Math.round(Math.random()*14-7));
+
+  context.lineWidth=8;
+  		var gradient=context.createLinearGradient(0,100,0,400);
+ gradient.addColorStop("0","#555");
+ gradient.addColorStop(Math.abs(5-timer%10)/10,"#252525");
+ gradient.addColorStop("1.0","#555");
+ // Fill with gradient
+ context.strokeStyle=gradient;
+   context.strokeText(winner, 350+Math.round(Math.random()*2-1), 50+Math.round(Math.random()*2-1));
+  context.strokeText('wins!', 350+Math.round(Math.random()*2-1),200+Math.round(Math.random()*2-1));
+    context.fillStyle="white";
+   context.fillText(winner, 350+ Math.round(Math.random()*14-7), 50+ Math.round(Math.random()*14-7));
+  context.fillText('wins!', 350+ Math.round(Math.random()*14-7),200+ Math.round(Math.random()*14-7));
+			
+
 			break;
 			case 1:
 		truetimer+=0.5
@@ -171,7 +235,7 @@
 		}
 	}
 	
-	function moveProj(loop){
+	function moveProj(){
 		ox=laser.x
 		oy=laser.y
 		laser.x+=laser.vx;
@@ -186,26 +250,27 @@
 		}
 		});
 		if(map[laser.x]&&map[laser.x][laser.y]==0){
-			l=false
 			if(map[ox+laser.vy][oy+laser.vx]==2){
 				t=laser.vx
 				laser.vx=laser.vy
 				laser.vy=t
-				if(loop==false){		
-				next();		
-				}
-				l=true
+				do{
+					i=Math.floor(Math.random()*30)
+					j=Math.floor(Math.random()*20)
+				}while(map[i][j]==2)
+				map[i][j]=2
 			}
 			if(map[ox-laser.vy][oy-laser.vx]==2){
 				t=laser.vx
 				laser.vx=-laser.vy
 				laser.vy=-t	
-				if(loop==false){
-				next();			
-				}
-				l=true
+				do{
+					i=Math.floor(Math.random()*30)
+					j=Math.floor(Math.random()*20)
+				}while(map[i][j]==2)
+				map[i][j]=2
 			}
-			setTimeout(moveProj,100,l);
+			setTimeout(moveProj,100);
 		}else{
 			if(map[laser.x]&&map[laser.x][laser.y]==1){
 				map[laser.x][laser.y]=0;
@@ -217,13 +282,11 @@
 				}while(map[i][j]!=2)
 				laser.x=i
 				laser.y=j
-				setTimeout(moveProj,500,false);
+				setTimeout(moveProj,500);
 			}else{
 				laser.x=laser.y=100;
 				laser.vx+=laser.vy=0;
-				if(!loop){
 					next();
-				}
 			}
 		}
 	}
