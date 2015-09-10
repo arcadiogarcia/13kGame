@@ -15,19 +15,19 @@
         //Please dont hate me
 
         //The player names
-        names = ["Red", "Blue"]
+        names = ["Red", "Blue"];
 
         //The tile size in the png
-        tile = 24
+        tile = 24;
         //0-welcome, 1-playing, 2-game over
         gamestate = 0;
 
-        a = new Image()
-        a.src = "a.png"
-        context = c.getContext("2d")
+        a = new Image();
+        a.src = "a.png";
+        context = c.getContext("2d");
         context.imageSmoothingEnabled = false;
-        c.width = context.width = 720
-        c.height = context.height = 480
+        c.width = context.width = 720;
+        c.height = context.height = 480;
         map = [];
 
         dead = -1;
@@ -39,18 +39,18 @@
             switch (gamestate) {
                 case 0:
                     timer++;
-                    context.fillStyle = "black"
+                    context.fillStyle = "black";
                     context.globalAlpha = 0.3;
-                    context.fillRect(0, 0, 720, 480)
+                    context.fillRect(0, 0, 720, 480);
                     context.font = '100px Verdana, Geneva, sans-serif';
                     context.textBaseline = 'top';
-                    context.textAlign = "center"
+                    context.textAlign = "center";
                     context.lineWidth = 30;
                     for (i = 0; i < 30; i++) {
                         for (j = 0; j < 20; j++) {
-                            context.globalAlpha = Math.abs((10 - timer + i + j) % 30) / 30
+                            context.globalAlpha = Math.abs((10 - timer + i + j) % 30) / 30;
                             context.drawImage(a, 0, (7 * i + 5 * j + 50) % (tile * 2), tile, tile, i * 24, j * 24, 24, 24);
-                            context.globalAlpha = 1
+                            context.globalAlpha = 1;
                         }
                     }
                     var gradient = context.createLinearGradient(0, 100, 0, 400);
@@ -76,16 +76,16 @@
                     break;
                 case 2:
                     timer++;
-                    context.fillStyle = "black"
+                    context.fillStyle = "black";
                     context.globalAlpha = 0.3;
-                    context.fillRect(0, 0, 720, 480)
+                    context.fillRect(0, 0, 720, 480);
                     context.font = '100px Verdana, Geneva, sans-serif';
                     context.textBaseline = 'top';
-                    context.textAlign = "center"
+                    context.textAlign = "center";
                     context.lineWidth = 30;
                     for (i = 0; i < 30; i++) {
                         for (j = 0; j < 20; j++) {
-                            context.globalAlpha = Math.abs((10 - timer + i + j) % 30) / 30
+                            context.globalAlpha = Math.abs((10 - timer + i + j) % 30) / 30;
                             context.drawImage(a, 0, (7 * i + 5 * j + 50) % (tile * 2), tile, tile, i * 24, j * 24, 24, 24);
                             context.globalAlpha = 1
                         }
@@ -114,10 +114,10 @@
 
                     break;
                 case 1:
-                    truetimer += 0.5
-                    timer = Math.round(truetimer)
-                    context.fillStyle = "black"
-                    context.fillRect(0, 0, 720, 480)
+                    truetimer += 0.5;
+                    timer = Math.round(truetimer);
+                    context.fillStyle = "black";
+                    context.fillRect(0, 0, 720, 480);
 
 
                     for (i = 0; i < 30; i++) {
@@ -125,12 +125,12 @@
                             switch (map[i][j]) {
                                 case 0:
                                     if (currentPlayer == 0) {
-                                        context.globalAlpha = Math.abs((10 - timer + i + j) % 20) / 30 + 0.2
+                                        context.globalAlpha = Math.abs((10 - timer + i + j) % 20) / 30 + 0.2;
                                     } else {
-                                        context.globalAlpha = Math.abs((10 - timer - i + j) % 20) / 30 + 0.2
+                                        context.globalAlpha = Math.abs((10 - timer - i + j) % 20) / 30 + 0.2;
                                     }
                                     context.drawImage(a, 0, (7 * i + 5 * j + 50) % (tile * 2), tile, tile, i * 24, j * 24, 24, 24);
-                                    context.globalAlpha = 1
+                                    context.globalAlpha = 1;
                                     break;
                                 case 1:
                                     context.drawImage(a, tile, 0, tile, tile, i * 24, j * 24, 24, 24);
@@ -161,12 +161,12 @@
 
                     break;
             }
-        }, 100)
+        }, 100);
 
-        currentPlayer = 0
+        currentPlayer = 0;
         //Resets everything and generates the map
         function init() {
-            dead = -1
+            dead = -1;
             for (i = 0; i < 30; i++) {
                 map[i] = [];
                 for (j = 0; j < 20; j++) {
@@ -177,9 +177,9 @@
             players = [{ x: 5, y: 5, id: 0, r: Math.PI / 2 }, { x: 25, y: 15, id: 1, r: -Math.PI / 2 }];
             players.forEach(function (x) {
                 map[x.x][x.y] = 0;
-            })
-            laser = { x: 100, y: 100, vx: 0, vy: 0 }
-            input = false
+            });
+            laser = { x: 100, y: 100, vx: 0, vy: 0 };
+            input = false;
             gamestate = 1;
         }
         //Moves if it is possible
@@ -205,24 +205,24 @@
         window.addEventListener("click", function (e) {
             switch (gamestate) {
                 case 0:
-                    init()
+                    init();
                     break;
                 case 1:
-                    x = 0
-                    y = 0
+                    x = 0;
+                    y = 0;
                     if (e.clientX / window.innerWidth<0.2) {
-                        x=-1
+                        x=-1;
                     }
                     if (e.clientX / window.innerWidth >0.8) {
-                        x = 1
+                        x = 1;
                     }
                     if (e.clientY / window.innerHeight < 0.2) {
-                        y = -1
-                        x=0
+                        y = -1;
+                        x=0;
                     }
                     if (e.clientY / window.innerHeight > 0.8) {
-                        y = 1
-                        x=0
+                        y = 1;
+                        x=0;
                     }
                     if (x == 0 && y == 0) {
                         tryShoot();
@@ -231,7 +231,7 @@
                     }
                     break;
                 case 2:
-                    gamestate = 0
+                    gamestate = 0;
                     break;
             }
         });
@@ -241,10 +241,10 @@
         window.addEventListener("keydown", function (e) {
             switch (gamestate) {
                 case 0:
-                    init()
+                    init();
                     break;
                 case 2:
-                    gamestate = 0
+                    gamestate = 0;
                     break;
                 case 1:
                     x = 0;
@@ -264,24 +264,24 @@
         function movePlayer(x, y, i, isfirst) {
             players[i].r = Math.atan2(y, x) + Math.PI / 2;
             if (map[players[i].x + x] && map[players[i].x + x][players[i].y + y] == 0 && !(players[i].y + y == players[(i + 1) % 2].y && players[i].x + x == players[(i + 1) % 2].x)) {
-                ox = players[i].x
-                oy = players[i].y
+                ox = players[i].x;
+                oy = players[i].y;
                 players[i].x += x;
                 players[i].y += y;
                 if (map[ox + x][oy + y] == 2) {
-                    t = x
-                    x = y
-                    y = t
+                    t = x;
+                    x = y;
+                    y = t;
                 }
                 if (map[ox - y][oy - x] == 2) {
-                    t = x
-                    x = -y
-                    y = -t
+                    t = x;
+                    x = -y;
+                    y = -t;
                 }
                 setTimeout(movePlayer, 200, x, y, i);
             } else if (map[players[i].x + x] && map[players[i].x + x][players[i].y + y] == 2) {
-                dead = i
-                winner = names[(i + 1) % 2]
+                dead = i;
+                winner = names[(i + 1) % 2];
                 setTimeout(function () {
                     gamestate = 2;
                 }, 1000);
@@ -289,21 +289,21 @@
                 if (!isfirst) {
                     next();
                 } else {
-                    input = false
+                    input = false;
                     return -1;
                 }
             }
         }
         //Move a laser ball
         function moveProj() {
-            ox = laser.x
-            oy = laser.y
+            ox = laser.x;
+            oy = laser.y;
             laser.x += laser.vx;
             laser.y += laser.vy;
             players.forEach(function (x) {
                 if (laser.y == x.y && laser.x == x.x) {
-                    winner = names[(x.id + 1) % 2]
-                    dead = x.id
+                    winner = names[(x.id + 1) % 2];
+                    dead = x.id;
                     setTimeout(function () {
                         gamestate = 2;
                     }, 1000);
@@ -311,24 +311,24 @@
             });
             if (map[laser.x] && map[laser.x][laser.y] == 0) {
                 if (map[ox + laser.vy][oy + laser.vx] == 2) {
-                    t = laser.vx
-                    laser.vx = laser.vy
-                    laser.vy = t
+                    t = laser.vx;
+                    laser.vx = laser.vy;
+                    laser.vy = t;
                     do {
-                        i = Math.floor(Math.random() * 30)
-                        j = Math.floor(Math.random() * 20)
-                    } while (map[i][j] == 2)
-                    map[i][j] = 2
+                        i = Math.floor(Math.random() * 30);
+                        j = Math.floor(Math.random() * 20);
+                    } while (map[i][j] == 2);
+                    map[i][j] = 2;
                 }
                 if (map[ox - laser.vy][oy - laser.vx] == 2) {
-                    t = laser.vx
-                    laser.vx = -laser.vy
-                    laser.vy = -t
+                    t = laser.vx;
+                    laser.vx = -laser.vy;
+                    laser.vy = -t;
                     do {
-                        i = Math.floor(Math.random() * 30)
-                        j = Math.floor(Math.random() * 20)
-                    } while (map[i][j] == 2)
-                    map[i][j] = 2
+                        i = Math.floor(Math.random() * 30);
+                        j = Math.floor(Math.random() * 20);
+                    } while (map[i][j] == 2);
+                    map[i][j] = 2;
                 }
                 setTimeout(moveProj, 100);
             } else {
@@ -337,11 +337,11 @@
                 }
                 if (map[laser.x] && map[laser.x][laser.y] == 2) {
                     do {
-                        i = Math.floor(Math.random() * 30)
-                        j = Math.floor(Math.random() * 20)
-                    } while (map[i][j] != 2)
-                    laser.x = i
-                    laser.y = j
+                        i = Math.floor(Math.random() * 30);
+                        j = Math.floor(Math.random() * 20);
+                    } while (map[i][j] != 2);
+                    laser.x = i;
+                    laser.y = j;
                     setTimeout(moveProj, 500);
                 } else {
                     laser.x = laser.y = 100;
@@ -351,8 +351,8 @@
             }
         }
         //Controlls the enemy AI
-        lastx = -1
-        lasty = -1
+        lastx = -1;
+        lasty = -1;
         function AI() {
             if (currentPlayer == 1 && document.getElementById("ai").checked) {
                 if (lastx == players[1].x && players[1].y == lasty) {
@@ -361,43 +361,43 @@
                     laser.vx = Math.sin(players[1].r);
                     laser.vy = -Math.cos(players[1].r);
                     moveProj();
-                    lastx = -1
-                    lasty = -1
+                    lastx = -1;
+                    lasty = -1;
                     return
                 }
-                lastx = players[1].x
-                lasty = players[1].y
-                x = 0
-                y = 0
+                lastx = players[1].x;
+                lasty = players[1].y;
+                x = 0;
+                y = 0;
                 if (players[1].y > players[0].y) {
-                    y = -1
+                    y = -1;
                 } else {
-                    y = 1
+                    y = 1;
                 }
                 if (Math.abs(players[1].x - players[0].x) > 5) {
                     if (players[1].x > players[0].x) {
-                        x = -1
-                        y = 0
+                        x = -1;
+                        y = 0;
                     } else {
-                        x = 1
-                        y = 0
+                        x = 1;
+                        y = 0;
                     }
                 }
-                while (movePlayer(x, y, currentPlayer) == -1);
+                while (movePlayer(x, y, currentPlayer) == -1){};
             }
         }
         //Ends a turn and starts the next
         function next() {
-            currentPlayer = (currentPlayer + 1) % 2
+            currentPlayer = (currentPlayer + 1) % 2;
             if (dead == -1) {
                 AI();
             }
-            setTimeout(function () { input = false; }, 100)
+            setTimeout(function () { input = false; }, 100);
             do {
-                i = Math.floor(Math.random() * 30)
-                j = Math.floor(Math.random() * 20)
-            } while (map[i][j] == 2)
-            map[i][j] = 2
+                i = Math.floor(Math.random() * 30);
+                j = Math.floor(Math.random() * 20);
+            } while (map[i][j] == 2);
+            map[i][j] = 2;
         }
     </script>
 </body>
