@@ -10,9 +10,16 @@
     Player vs Player<input type="radio" name="ai" value="0" checked>
     Player vs AI<input type="radio" name="ai" value="1" id="ai">
     <script>
+        //This code is HORRIBLE
+        //It has been written (quickly) to be as small as possible, so it is very messy and uses globar variables
+        //Please dont hate me
+
+        //The player names
         names = ["Red", "Blue"]
 
+        //The tile size in the png
         tile = 24
+        //0-welcome, 1-playing, 2-game over
         gamestate = 0;
 
         a = new Image()
@@ -27,6 +34,7 @@
 
         truetimer = 0;
         timer = 0;
+        //Draw stuff
         setInterval(function () {
             switch (gamestate) {
                 case 0:
@@ -50,7 +58,6 @@
                     gradient.addColorStop(Math.abs(5 - (timer + 5) % 10) / 10, "#252525");
                     gradient.addColorStop("1.0", "#7200ad");
                     context.strokeStyle = gradient;
-                    // Fill with gradient
 
                     context.strokeText('Event', 350 + Math.round(Math.random() * 14 - 7), 50 + Math.round(Math.random() * 14 - 7));
                     context.strokeText('horizon', 350 + Math.round(Math.random() * 14 - 7), 200 + Math.round(Math.random() * 14 - 7));
@@ -60,7 +67,6 @@
                     gradient.addColorStop("0", "#006ac0");
                     gradient.addColorStop(Math.abs(5 - timer % 10) / 10, "#252525");
                     gradient.addColorStop("1.0", "#2e0251");
-                    // Fill with gradient
                     context.strokeStyle = gradient;
                     context.strokeText('Event', 350 + Math.round(Math.random() * 2 - 1), 50 + Math.round(Math.random() * 2 - 1));
                     context.strokeText('horizon', 350 + Math.round(Math.random() * 2 - 1), 200 + Math.round(Math.random() * 2 - 1));
@@ -89,7 +95,6 @@
                     gradient.addColorStop(Math.abs(5 - (timer + 5) % 10) / 10, "#252525");
                     gradient.addColorStop("1.0", winner);
                     context.strokeStyle = gradient;
-                    // Fill with gradient
 
                     context.strokeText(winner, 350 + Math.round(Math.random() * 14 - 7), 50 + Math.round(Math.random() * 14 - 7));
                     context.strokeText('wins!', 350 + Math.round(Math.random() * 14 - 7), 200 + Math.round(Math.random() * 14 - 7));
@@ -99,7 +104,6 @@
                     gradient.addColorStop("0", "#555");
                     gradient.addColorStop(Math.abs(5 - timer % 10) / 10, "#252525");
                     gradient.addColorStop("1.0", "#555");
-                    // Fill with gradient
                     context.strokeStyle = gradient;
                     context.strokeText(winner, 350 + Math.round(Math.random() * 2 - 1), 50 + Math.round(Math.random() * 2 - 1));
                     context.strokeText('wins!', 350 + Math.round(Math.random() * 2 - 1), 200 + Math.round(Math.random() * 2 - 1));
@@ -160,7 +164,7 @@
         }, 100)
 
         currentPlayer = 0
-
+        //Resets everything and generates the map
         function init() {
             dead = -1
             for (i = 0; i < 30; i++) {
@@ -178,14 +182,14 @@
             input = false
             gamestate = 1;
         }
-
+        //Moves if it is possible
         function tryMove(x, y) {
             if (!input && !(x == 0 && y == 0)) {
                 input = true;
                 movePlayer(x, y, currentPlayer, true);
             }
         }
-
+        //Shoots if it is possible
         function tryShoot() {
             if (!input) {
                 laser.x = players[currentPlayer].x;
@@ -196,7 +200,7 @@
                 moveProj();
             }
         }
-
+        //Input handling
         input = false;
         window.addEventListener("click", function (e) {
             switch (gamestate) {
@@ -256,7 +260,7 @@
                     break;
             }
         });
-
+        //Move the player
         function movePlayer(x, y, i, isfirst) {
             players[i].r = Math.atan2(y, x) + Math.PI / 2;
             if (map[players[i].x + x] && map[players[i].x + x][players[i].y + y] == 0 && !(players[i].y + y == players[(i + 1) % 2].y && players[i].x + x == players[(i + 1) % 2].x)) {
@@ -290,7 +294,7 @@
                 }
             }
         }
-
+        //Move a laser ball
         function moveProj() {
             ox = laser.x
             oy = laser.y
@@ -346,7 +350,7 @@
                 }
             }
         }
-
+        //Controlls the enemy AI
         lastx = -1
         lasty = -1
         function AI() {
@@ -382,7 +386,7 @@
                 while (movePlayer(x, y, currentPlayer) == -1);
             }
         }
-
+        //Ends a turn and starts the next
         function next() {
             currentPlayer = (currentPlayer + 1) % 2
             if (dead == -1) {
