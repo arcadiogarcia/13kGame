@@ -69,7 +69,7 @@
 		
 		context.drawImage(a,tile,tile,tile,tile,laser.x*24,laser.y*24,24,24);
 		
-		if(timer%4>2){
+		if(timer%4>2&&dead==-1){
 			context.drawImage(a,tile,2*tile,tile,tile,players[currentPlayer].x*24,players[currentPlayer].y*24,24,24);
 		}
 		players.forEach(function(x){
@@ -122,7 +122,7 @@
 		y=e.keyCode==40?y+1:y;
 		if(!input && !(x==0&&y==0)){
 			input=true;
-			movePlayer(x,y,currentPlayer);
+			movePlayer(x,y,currentPlayer,true);
 		}
 		if(!input&&e.keyCode==32){
 			laser.x=players[currentPlayer].x;
@@ -136,7 +136,7 @@
 		}
 	});
 	
-	function movePlayer(x,y,i){
+	function movePlayer(x,y,i,isfirst){
 		players[i].r=Math.atan2(y,x)+Math.PI/2;
 		if(map[players[i].x+x]&&map[players[i].x+x][players[i].y+y]==0 && !(players[i].y+y==players[(i+1)%2].y&&players[i].x+x==players[(i+1)%2].x)){
 			ox=players[i].x
@@ -161,11 +161,15 @@
 				gamestate=2;
 			},1000);
 		}else {
-			next();
+			if(!isfirst){
+				next();
+			}else{
+				input=false
+			}	
 		}
 	}
 	
-	function moveProj(){
+	function moveProj(loop){
 		ox=laser.x
 		oy=laser.y
 		laser.x+=laser.vx;
@@ -180,27 +184,35 @@
 		}
 		});
 		if(map[laser.x]&&map[laser.x][laser.y]==0){
+			l=false
 			if(map[ox+laser.vy][oy+laser.vx]==2){
 				t=laser.vx
 				laser.vx=laser.vy
-				laser.vy=t		
+				laser.vy=t
+				if(loop==false){		
 				next();		
+				}
+				l=true
 			}
 			if(map[ox-laser.vy][oy-laser.vx]==2){
 				t=laser.vx
 				laser.vx=-laser.vy
 				laser.vy=-t	
+				if(loop==false){
 				next();			
+				}
+				l=true
 			}
-			setTimeout(moveProj,100);
+			setTimeout(moveProj,100,l);
 		}else{
 			if(map[laser.x]&&map[laser.x][laser.y]==1){
 				map[laser.x][laser.y]=0;
 			}
 			laser.x=laser.y=100;
 			laser.vx+=laser.vy=0;
-			
+			if(!loop){
 			next();
+			}
 		}
 	}
 	
@@ -242,7 +254,9 @@
 	
 	function next(){
 		currentPlayer=(currentPlayer+1)%2
-		AI();
+		if(dead==-1){
+			AI();
+		}
 		setTimeout(function(){input=false;},100)
 		do{
 		i=Math.floor(Math.random()*30)
